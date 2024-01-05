@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+        <title>
+            JS Forms Website
+        </title>
+
+        <style>
+
+        body {
+            background-color: black;
+        }
+        .question
+        {
+            font-family: Courier;
+            text-align:center; 
+            padding: 10px;
+            border: 5px solid rgb(77, 78, 161);
+            margin: 0 auto; 
+            background-color: aquamarine;
+
+        }
+
+        textarea 
+        {
+            width: 500px;
+            height: 200px;
+        }
+
+        header
+        {
+            text-align: center;
+            font-family: Courier;
+            color: aliceblue; 
+        }
+
+        #numChar
+        {   
+            font-size: 30px;
+        }
+        #numLetter
+        {
+            font-size: 30px;
+        }
+
+        img
+        {
+            width: 30;
+            height: 30px;
+        }
+
+        .q1
+        {
+            font-size: 25px;
+            color: rgb(162, 68, 68);
+        }
+
+        .q1header
+        {
+            font-size: 35px;
+            text-align: center;
+            color: rgb(93, 13, 13);
+        }
+
+        </style>
+
+    </head>
+
+    <body onload="check_q3()">
+        <header>
+            <h1> Interactive Forms - Lab 04 </h1> 
+
+        </header>
+        <main>
+
+            <div class="stack">
+
+                <section class="question">
+                    <h2>
+                        Form #1
+                    </h2>
+    
+                    <form id="FormOne" action="" method="post">
+                        <p>Please enter your name: </p>
+                        <input type="text" id="name_input" value=""> <br>
+                        <p>Please enter your address: </p>
+                        <input type="text" id="address_input" value=""> <br>
+                        <p>Please enter your phone number: </p>
+                        <input type="text" id="phone_input" value=""> <br> <br>
+    
+                        <button type="button" onclick="check_q1()"> Submit Form </button>
+                    </form> 
+                         
+                    <div id="Updated"></div>
+            
+                </section>
+            </div>
+            
+            <div class="stack">
+                <section class="question">
+                    <h2>
+                        Form #2
+                    </h2>
+
+                    <p>Enter text below: </p>
+                    <textarea id="FormTwo" oninput="check_q2()"></textarea>
+
+                    <div id="numChar">
+                        Number of Characters: 0 
+                    </div>
+
+                    <div id="numLetter">
+                        Number of Letters: 0 
+                    </div>
+
+                </section>
+            </div>
+
+            <div class="stack">
+                <section class="question">
+                    <h2>
+                        Form #3
+                    </h2>
+
+                    <p>Enter links below: </p>
+                    <textarea id="FormThree">https://www.SecureSite.com&#10http://www.UnsecureSite.com</textarea> <br><br>
+
+                    <button type="button" onclick="check_q3()"> Create Bookmarks </button>
+
+                    <div id="Bookmarks"></div>
+                </section>
+            </div>
+
+            <script>
+
+                function check_q1()
+                {
+                    const name_input = document.getElementById('name_input');
+                    const address_input = document.getElementById('address_input');
+                    const phone_input = document.getElementById('phone_input');
+                    const result = document.getElementById('Updated');
+
+                    result.innerHTML = '';
+
+                    const name = name_input.value;
+                    const address = address_input.value;
+                    const phone = phone_input.value;
+
+                    const name_exp = /^[a-zA-Z]+$/;
+                    const phone_exp = /^\((\d{3})\) (\d{3})-(\d{4})$/;
+
+                    if (!name_exp.test(name)) 
+                    {
+                        alert('Please only include letters in the name.');
+                        return;
+                    }
+
+                    if (!phone_exp.test(phone)) 
+                    {
+                        alert('Ensure the inputted phone number is in the following format - (###) ###-####');
+                        return;
+                    }
+
+                    const phone_output = phone.replace(/\s/g, '-').replace(/[()]/g, '');
+
+                    result.innerHTML = `
+                        <h2 class="q1header">Your Information</h2>
+                        <p class="q1">Your Name: ${name}</p>
+                        <p class="q1">Your Address: ${address}</p>
+                        <p class="q1">Your Phone-Number: ${phone_output}</p>
+                    `;
+
+                }
+
+                function check_q2()
+                {
+                    const inp = document.getElementById('FormTwo');
+                    const text_inp = inp.value;
+
+                    const char_print = document.getElementById('numChar');
+                    const letter_print = document.getElementById('numLetter');
+
+                    const num_chars = text_inp.length;
+                    const num_letters = (text_inp.match(/[a-zA-Z]/g) || []).length;
+
+                    char_print.textContent = `Number of Characters: ${num_chars}`;
+                    letter_print.textContent = `Number of Letters: ${num_letters}`;
+
+                }
+
+                function check_q3()
+                {
+
+                    const book_inp = document.getElementById('FormThree');
+                    const list_elm = document.getElementById('Bookmarks');
+                    const link = book_inp.value.split('\n');
+                    
+                    list_elm.innerHTML = "";
+
+                    for (const i of link) 
+                    {
+                        const img_lock = document.createElement('img');
+                        img_lock.src = i.includes("https") ? './good.png' : './bad.png';
+
+                        const bookmark_elm = document.createElement('div');
+
+                        const bookmark_link = document.createElement('span');
+                        bookmark_link.textContent = i;
+
+                        bookmark_elm.appendChild(bookmark_link);
+                        bookmark_elm.appendChild(img_lock);
+
+                        list_elm.appendChild(bookmark_elm);
+                    }
+                }
+
+            </script>
+        </main>
+    </body>
+</html>
